@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Photo;
 use App\Models\Profil;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -78,6 +80,14 @@ class RegisterController extends Controller
                 'age' => $data['age'],
                 'user_id' => $user->id,
                 ]);
-                return $user;
+                
+            Photo::create([
+                Storage::put('public/img', $data['url']),
+                'url'=> $data['url']->hashName(),
+                'user_id' => $user->id
+                ]);
+
+         return $user;
+        }
     }
-}
+           
